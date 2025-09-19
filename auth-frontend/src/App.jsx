@@ -22,7 +22,7 @@ const App = () => {
         phoneNumber: user.phoneNumber,
       };
 
-      const apiResponse = await fetch(`${BACKEND_URL}/google-login`, {
+      const apiResponse = await fetch(`${BACKEND_URL}/googleLogin`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
