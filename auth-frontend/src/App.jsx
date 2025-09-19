@@ -3,6 +3,8 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "./utils/firebase.js";
 import "./App.css";
 
+const BACKEND_URL = "https://authentication-1-9vju.onrender.com/api/auth"; // ✅ Correct backend URL
+
 const App = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -20,37 +22,37 @@ const App = () => {
         phoneNumber: user.phoneNumber,
       };
 
-      const apiResponse = await fetch("https://authentication-1-9vju.onrender.com//api/auth/login", {
+      const apiResponse = await fetch(`${BACKEND_URL}/login`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userdata),
       });
 
-      const data = await apiResponse.json();
       if (!apiResponse.ok) {
-        setErrorMessage(data.message || "Failed to login with Google");
-        return;
+        // handle non-JSON error gracefully
+        const text = await apiResponse.text();
+        throw new Error(text || "Failed to login with Google");
       }
 
+      const data = await apiResponse.json();
       console.log("Google Auth Response:", data);
-      // ✅ External redirect
+
+      // Redirect externally
       window.location.href = "https://crautomate.vercel.app";
     } catch (error) {
       console.error("Google login failed:", error);
-      setErrorMessage("Google authentication failed.");
+      setErrorMessage(error.message || "Google authentication failed.");
     }
   };
 
   // Normal form login/signup
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); // reset error
+    setErrorMessage("");
 
     try {
-      const endpoint = isSignup
-        ? "https://authentication-1-9vju.onrender.com//api/auth/signup"
-        : "https://authentication-1-9vju.onrender.com//api/auth/login";
+      const endpoint = isSignup ? `${BACKEND_URL}/signup` : `${BACKEND_URL}/login`;
 
       const payload = isSignup
         ? {
@@ -70,18 +72,19 @@ const App = () => {
         credentials: "include",
       });
 
-      const data = await response.json();
       if (!response.ok) {
-        setErrorMessage(data.message || "Failed to authenticate");
-        return;
+        const text = await response.text();
+        throw new Error(text || "Failed to authenticate");
       }
 
+      const data = await response.json();
       console.log("Auth success:", data);
-      // ✅ External redirect
+
+      // Redirect externally
       window.location.href = "https://crautomate.vercel.app";
     } catch (err) {
       console.error("Form login/signup failed:", err);
-      setErrorMessage("Something went wrong. Try again.");
+      setErrorMessage(err.message || "Something went wrong. Try again.");
     }
   };
 
@@ -102,21 +105,11 @@ const App = () => {
           )}
           <div className="input-group">
             <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="you@example.com"
-              required
-            />
+            <input type="email" name="email" placeholder="you@example.com" required />
           </div>
           <div className="input-group">
             <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="••••••••"
-              required
-            />
+            <input type="password" name="password" placeholder="••••••••" required />
           </div>
           <button type="submit" className="btn-primary">
             {isSignup ? "Sign Up" : "Sign In"}
@@ -126,10 +119,7 @@ const App = () => {
         <div className="divider">OR</div>
 
         <button onClick={googleLogin} className="btn-google">
-          <img
-            src="https://www.svgrepo.com/show/355037/google.svg"
-            alt="Google"
-          />
+          <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" />
           Sign in with Google
         </button>
 
