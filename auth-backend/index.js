@@ -11,12 +11,23 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
-app.use(
-  cors({
-    origin: "http://localhost:5173", // ❌ remove trailing slash
-    credentials: true,
-  })
-);
+
+const allowedOrigins = [
+  "https://authentication-app-70.vercel.app", // deployed frontend
+  "http://localhost:5173" // local dev
+];
+
+app.use(cors({
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true); // allow non-browser tools like Postman
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = "The CORS policy for this site does not allow access from the specified Origin.";
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true, // if you’re sending cookies
+}));
 
 // Routes
 app.use("/api/auth", AuthRoute); // ❌ use "/" not "./"
