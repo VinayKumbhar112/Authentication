@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "./utils/firebase.js";
-import "./app.css";
+import "./App.css";
 
 const App = () => {
   const [isSignup, setIsSignup] = useState(false);
