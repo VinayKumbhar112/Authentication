@@ -20,7 +20,7 @@ const App = () => {
         phoneNumber: user.phoneNumber,
       };
 
-      const apiResponse = await fetch("http://localhost:8080/api/auth/login", {
+      const apiResponse = await fetch("https://authentication-1-9vju.onrender.com//api/auth/login", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -49,8 +49,8 @@ const App = () => {
 
     try {
       const endpoint = isSignup
-        ? "http://localhost:8080/api/auth/signup"
-        : "http://localhost:8080/api/auth/login";
+        ? "https://authentication-1-9vju.onrender.com//api/auth/signup"
+        : "https://authentication-1-9vju.onrender.com//api/auth/login";
 
       const payload = isSignup
         ? {
