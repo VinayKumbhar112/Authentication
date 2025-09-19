@@ -7,6 +7,8 @@
   background: linear-gradient(135deg, #cee8ef, #f2f3f7);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 20px;
+  border: 1px solid rgb(228, 218, 218);
+  border-radius: 5px
 }
 
 /* Card */
