@@ -10,6 +10,7 @@ AuthRoute.post("/signup", async (req, res) => {
 });
 
 AuthRoute.post("/login", login);
+AuthRoute.post("/google-login", googleLogin);
 
 
 export default AuthRoute;

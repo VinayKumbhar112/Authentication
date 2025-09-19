@@ -93,3 +93,26 @@ export const login = async (req, res) => {
     return res.status(500).json({ success: false, error: err.message });
   }
 };
+
+export const googleLogin = async (req, res) => {
+  try {
+    const { name, email, avatar, phoneNumber } = req.body;
+
+    if (!email) return res.status(400).json({ message: "Email is required" });
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = new User({ name, email, avatar, phoneNumber });
+      await user.save();
+    }
+
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+    res.cookie("access_token", token, { httpOnly: true, secure: false, sameSite: "lax" });
+
+    res.status(200).json({ success: true, user });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
