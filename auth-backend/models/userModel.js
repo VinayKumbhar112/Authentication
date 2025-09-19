@@ -12,7 +12,7 @@ const UserSchema=new mongoose.Schema({
   },
   avatar:{
     type:String,
-    required:true,
+  
 
   }
 ,
@@ -20,6 +20,10 @@ phoneNumber:{
   type:String,
   
 },
+password:{
+  type:String,
+  
+}
 
 },{timestamps:true});
 
