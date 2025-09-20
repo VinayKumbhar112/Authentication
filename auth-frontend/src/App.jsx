@@ -51,47 +51,54 @@ const App = () => {
   };
 
   // Normal form login/signup
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMessage("");
-    setLoading(true);
+ // Normal form login only
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setErrorMessage("");
+  setLoading(true); // show loader
 
-    try {
-      const endpoint = isSignup ? `${BACKEND_URL}/signup` : `${BACKEND_URL}/login`;
+  try {
+    const endpoint = isSignup 
+      ? `${BACKEND_URL}/signup` 
+      : `${BACKEND_URL}/login`;
 
-      const payload = isSignup
-        ? {
-            name: e.target.name.value,
-            email: e.target.email.value,
-            password: e.target.password.value,
-          }
-        : {
-            email: e.target.email.value,
-            password: e.target.password.value,
-          };
+    const payload = isSignup
+      ? {
+          name: e.target.name?.value,
+          email: e.target.email.value,
+          password: e.target.password.value,
+        }
+      : {
+          email: e.target.email.value,
+          password: e.target.password.value,
+        };
 
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        credentials: "include",
-      });
+    // Await the fetch fully
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      credentials: "include",
+    });
 
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(text || "Failed to authenticate");
-      }
+    // Always parse the response properly
+    const data = await response.json().catch(() => null);
 
-      const data = await response.json();
-      console.log("Auth success:", data);
-
-      window.location.replace("https://crautomate.vercel.app");
-    } catch (err) {
-      console.error("Form login/signup failed:", err);
-      setErrorMessage("Authentication failed. Try again.");
-      setLoading(false);
+    if (!response.ok) {
+      throw new Error(data?.message || "Failed to authenticate");
     }
-  };
+
+    console.log("Auth success:", data);
+
+    // Use assign for reliable redirect
+    window.location.assign("https://crautomate.vercel.app");
+  } catch (err) {
+    console.error("Form login failed:", err);
+    setErrorMessage(err.message || "Something went wrong. Try again.");
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="container">
@@ -105,7 +112,7 @@ const App = () => {
         {loading && (
           <div className="loader-overlay">
             <div className="spinner"></div>
-            <p>Redirecting...</p>
+            <p>loading</p>
           </div>
         )}
 
