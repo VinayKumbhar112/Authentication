@@ -3,7 +3,7 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "./utils/firebase.js";
 import "./App.css";
 
-const BACKEND_URL = "authentication-auth-backend.vercel.app.com/api/auth"; // ✅ Correct backend URL
+const BACKEND_URL = "https://authentication-auth-backend.vercel.app/api/auth"; // ✅ Correct backend URL
 
 const App = () => {
   const [isSignup, setIsSignup] = useState(false);
