@@ -8,85 +8,89 @@ const BACKEND_URL = "https://authentication-1-9vju.onrender.com/api/auth"; // âœ
 const App = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+const [loading, setLoading] = useState(false);
 
   // Google login
   const googleLogin = async () => {
-    try {
-      const response = await signInWithPopup(auth, provider);
-      const user = response.user;
+  try {
+    setLoading(true); // show loader
+    const response = await signInWithPopup(auth, provider);
+    const user = response.user;
 
-      const userdata = {
-        name: user.displayName,
-        email: user.email,
-        avatar: user.photoURL,
-        phoneNumber: user.phoneNumber,
-      };
+    const userdata = {
+      name: user.displayName,
+      email: user.email,
+      avatar: user.photoURL,
+      phoneNumber: user.phoneNumber,
+    };
 
-      const apiResponse = await fetch(`${BACKEND_URL}/googleLogin`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userdata),
-      });
+    const apiResponse = await fetch(`${BACKEND_URL}/googleLogin`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userdata),
+    });
 
-      if (!apiResponse.ok) {
-        // handle non-JSON error gracefully
-        const text = await apiResponse.text();
-        throw new Error(text || "Failed to login with Google");
-      }
-
-      const data = await apiResponse.json();
-      console.log("Google Auth Response:", data);
-
-      // Redirect externally
-      window.location.href = "https://crautomate.vercel.app";
-    } catch (error) {
-      console.error("Google login failed:", error);
-      setErrorMessage(error.message || "Google authentication failed.");
+    if (!apiResponse.ok) {
+      const text = await apiResponse.text();
+      throw new Error(text || "Failed to login with Google");
     }
-  };
+
+    const data = await apiResponse.json();
+    console.log("Google Auth Response:", data);
+
+    window.location.href = "https://crautomate.vercel.app";
+  } catch (error) {
+    console.error("Google login failed:", error);
+    setErrorMessage(error.message || "Google authentication failed.");
+    setLoading(false);
+  }
+};
+
 
   // Normal form login/signup
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMessage("");
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setErrorMessage("");
+  setLoading(true);
 
-    try {
-      const endpoint = isSignup ? `${BACKEND_URL}/signup` : `${BACKEND_URL}/login`;
+  try {
+    const endpoint = isSignup ? `${BACKEND_URL}/signup` : `${BACKEND_URL}/login`;
 
-      const payload = isSignup
-        ? {
-            name: e.target.name?.value,
-            email: e.target.email.value,
-            password: e.target.password.value,
-          }
-        : {
-            email: e.target.email.value,
-            password: e.target.password.value,
-          };
+    const payload = isSignup
+      ? {
+          name: e.target.name?.value,
+          email: e.target.email.value,
+          password: e.target.password.value,
+        }
+      : {
+          email: e.target.email.value,
+          password: e.target.password.value,
+        };
 
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        credentials: "include",
-      });
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      credentials: "include",
+    });
 
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(text || "Failed to authenticate");
-      }
-
-      const data = await response.json();
-      console.log("Auth success:", data);
-
-      // Redirect externally
-      window.location.href = "https://crautomate.vercel.app";
-    } catch (err) {
-      console.error("Form login/signup failed:", err);
-      setErrorMessage(err.message || "Something went wrong. Try again.");
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text || "Failed to authenticate");
     }
-  };
+
+    const data = await response.json();
+    console.log("Auth success:", data);
+
+    window.location.href = "https://crautomate.vercel.app";
+  } catch (err) {
+    console.error("Form login/signup failed:", err);
+    setErrorMessage(err.message || "Something went wrong. Try again.");
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="container">
@@ -95,6 +99,13 @@ const App = () => {
 
         {/* Error Popup */}
         {errorMessage && <div className="error-popup">{errorMessage}</div>}
+        {loading && (
+  <div className="loader-overlay">
+    <div className="spinner"></div>
+    <p>Redirecting...</p>
+  </div>
+)}
+
 
         <form onSubmit={handleSubmit}>
           {isSignup && (
