@@ -1,16 +1,15 @@
 import express from "express";
-import { signup, login ,googleLogin} from "../controller/Authentication.js";
+import { signup, login, googleLogin } from "../controller/Authentication.js";
 
 const AuthRoute = express.Router();
 
+// Signup
 AuthRoute.post("/signup", signup);
-AuthRoute.post("/signup", async (req, res) => {
-  console.log("Signup request body:", req.body); // 👈 check this
-  
-});
 
+// Login
 AuthRoute.post("/login", login);
-AuthRoute.post("/googleLogin", googleLogin);
 
+// Google Login
+AuthRoute.post("/googleLogin", googleLogin);
 
 export default AuthRoute;
