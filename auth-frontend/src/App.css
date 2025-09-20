@@ -7,8 +7,6 @@
   background: linear-gradient(135deg, #cee8ef, #f2f3f7);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 20px;
-  border: 1px solid rgb(228, 218, 218);
-  border-radius: 5px
 }
 
 /* Card */
@@ -16,69 +14,79 @@
   background: #ffffff;
   padding: 40px 30px;
   border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
   max-width: 400px;
   width: 100%;
   text-align: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.auth-card:hover {
+  transform: translateY(-2px);
 }
 
 /* Heading */
 .auth-card h2 {
-  margin-bottom: 25px;
-  color: #333;
-  font-size: 24px;
-  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1e293b;
+  font-size: 26px;
+  font-weight: 700;
 }
 
 /* Input groups */
 .input-group {
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   text-align: left;
 }
 
 .input-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   font-size: 14px;
-  color: #555;
+  color: #475569;
+  font-weight: 500;
 }
 
 .input-group input {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
   outline: none;
-  transition: 0.3s;
+  font-size: 15px;
+  transition: all 0.3s;
 }
 
 .input-group input:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
+  border-color: #3b82f6;
+  box-shadow: 0 0 6px rgba(59,130,246,0.3);
 }
 
-/* Buttons */
+/* Primary Button */
 .btn-primary {
   width: 100%;
-  background: #6366f1;
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
   color: white;
   padding: 12px;
   border: none;
   border-radius: 12px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background 0.3s, transform 0.2s;
 }
 
 .btn-primary:hover {
-  background: #4f46e5;
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+  transform: translateY(-1px);
 }
 
+/* Divider */
 .divider {
-  margin: 20px 0;
+  margin: 22px 0;
   position: relative;
   font-size: 14px;
-  color: #888;
+  color: #94a3b8;
 }
 
 .divider::before,
@@ -88,16 +96,11 @@
   top: 50%;
   width: 40%;
   height: 1px;
-  background: #ccc;
+  background: #e2e8f0;
 }
 
-.divider::before {
-  left: 0;
-}
-
-.divider::after {
-  right: 0;
-}
+.divider::before { left: 0; }
+.divider::after { right: 0; }
 
 /* Google Button */
 .btn-google {
@@ -106,16 +109,18 @@
   justify-content: center;
   gap: 10px;
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
   border-radius: 12px;
   cursor: pointer;
   background: #fff;
   transition: 0.3s;
+  font-weight: 500;
+  font-size: 15px;
 }
 
 .btn-google:hover {
-  background: #f1f1f1;
+  background: #f8fafc;
 }
 
 .btn-google img {
@@ -125,13 +130,13 @@
 
 /* Toggle Text */
 .toggle-text {
-  margin-top: 20px;
+  margin-top: 18px;
   font-size: 14px;
-  color: #555;
+  color: #475569;
 }
 
 .toggle-text span {
-  color: #6366f1;
+  color: #2563eb;
   font-weight: 600;
   cursor: pointer;
 }
@@ -140,36 +145,32 @@
   text-decoration: underline;
 }
 
-
+/* Error Popup */
 .error-popup {
-  background: #ffdddd;
-  border: 1px solid #ff5c5c;
-  color: #a94442;
+  background: #fee2e2;
+  border: 1px solid #ef4444;
+  color: #991b1b;
   padding: 12px;
   margin-bottom: 15px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 14px;
   text-align: center;
   animation: fadeIn 0.4s ease-in-out;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
+
+/* Loader Overlay */
 .loader-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -180,8 +181,8 @@
 .spinner {
   width: 50px;
   height: 50px;
-  border: 6px solid #ddd;
-  border-top: 6px solid #007bff;
+  border: 6px solid #e2e8f0;
+  border-top: 6px solid #2563eb;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 15px;
