@@ -14,6 +14,7 @@ app.use(express.json());
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:8080",
   "https://authentication-app-70.vercel.app",
 ];
 
