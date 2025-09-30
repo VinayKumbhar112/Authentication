@@ -12,12 +12,11 @@ const app = express();
 // Middlewares
 app.use(express.json());
 
-const allowedOrigins = [
-  "*",
-  "http://localhost:5173",
-  "http://localhost:8080",
-  "https://authentication-app-70.vercel.app",
-];
+app.use(cors({
+  origin: "*", // allow all origins
+  methods: ["GET", "POST", "PUT", "DELETE"], // allowed methods
+  allowedHeaders: ["Content-Type", "Authorization"], // allowed headers
+}));
 
 app.use(
   cors({
